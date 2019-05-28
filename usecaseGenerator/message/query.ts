@@ -3,7 +3,7 @@ import { Message } from './type'
 import { MessageCollectionName } from './model'
 import { generateMessagesObservable } from './rxfire'
 
-abstract class BaseRepository {
+abstract class BaseQuery {
   private readonly _messages: Subject<Message[]> = new Subject<Message[]>()
   private _subscriptions: Subscription[] = []
 
@@ -26,7 +26,7 @@ abstract class BaseRepository {
 }
 
 export function messageQueryClassFactory(collectionName: MessageCollectionName) {
-  return class MessageRepository extends BaseRepository {
+  return class MessageQuery extends BaseQuery {
     get collectionName() {
       return collectionName
     }
