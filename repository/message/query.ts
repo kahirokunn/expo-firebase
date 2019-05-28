@@ -1,22 +1,34 @@
 import { Observable, Subject, Subscription } from 'rxjs'
 import { Message } from './type'
-import { getMessages } from './rxfire'
+import { MessageCollectionName } from './model'
+import { generateMessagesObservable } from './rxfire'
 
-export class MessageRepository {
+abstract class BaseRepository {
   private readonly _messages: Subject<Message[]> = new Subject<Message[]>()
   private _subscriptions: Subscription[] = []
+
+  abstract collectionName: MessageCollectionName
 
   get messages$(): Observable<Message[]> {
     return this._messages
   }
 
   public fetchMessage(startAfter?: Date) {
-    const subscription = getMessages(startAfter).subscribe(this._messages)
+    const subscription = generateMessagesObservable(this.collectionName, startAfter)
+      .subscribe(this._messages)
     this._subscriptions.push(subscription)
   }
 
   public depose() {
     this._subscriptions
       .map((subscription) => subscription.unsubscribe())
+  }
+}
+
+export function messageQueryClassFactory(collectionName: MessageCollectionName) {
+  return class MessageRepository extends BaseRepository {
+    get collectionName() {
+      return collectionName
+    }
   }
 }

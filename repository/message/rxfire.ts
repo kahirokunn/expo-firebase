@@ -1,25 +1,29 @@
 import { Message } from './type'
 import { collectionData } from 'rxfire/firestore'
 import { filter, map } from 'rxjs/operators'
-import { firestore } from '../../firebase'
+import { Timestamp } from '../../firebase'
+import { messageModelClassFactory, MessageCollectionName } from './model'
 
-function messageMapper(message: any): Message {
+type Document = Message & { createdAt: Timestamp }
+
+function messageMapper(messageDocRef: Document): Message {
   return {
-    ...message,
-    createdAt: message.createdAt.toDate(),
+    ...messageDocRef,
+    createdAt: messageDocRef.createdAt.toDate(),
   }
 }
 
-function query(startAfter?: Date) {
-  let query = firestore.collection('message').orderBy('updatedAt', 'desc').limit(20)
+function query(collectionName: MessageCollectionName, startAfter?: Date) {
+  const __class = messageModelClassFactory(collectionName)
+  let query = __class.collectionReference().orderBy('updatedAt', 'desc').limit(20)
   if (startAfter) {
     query = query.startAfter(startAfter)
   }
   return query
 }
 
-export function getMessages(startAfter?: Date) {
-  return collectionData(query(startAfter), 'id')
+export function generateMessagesObservable(collectionName: MessageCollectionName, startAfter?: Date) {
+  return collectionData<Document>(query(collectionName, startAfter), 'id')
     .pipe(filter((dataList) => dataList.length > 0))
     .pipe(map((dataList) => dataList.map(messageMapper)))
 }

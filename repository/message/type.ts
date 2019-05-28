@@ -1,7 +1,7 @@
 export enum MessageType {
   text = 'text',
-  image = 'text',
-  note = 'text',
+  image = 'image',
+  note = 'note',
 }
 
 type Base = {

@@ -1,4 +1,6 @@
-import { TextMessage, NoteMessage, ImageMessage } from './type'
+import { TextMessage, NoteMessage, ImageMessage, MessageType } from './type'
+import { factoryMessageId } from './model'
+import { getUserId } from '../../firebase/helpers'
 
 type Base = {
   sentToAccountId: string
@@ -16,17 +18,34 @@ export type InputImageMessageFactory = Base & {
   imageUrl: ImageMessage['imageUrl']
 }
 
+function getSameParams() {
+  return {
+    id: factoryMessageId(),
+    sentFromAccountId: getUserId(),
+    createdAt: new Date()
+  }
+}
+
 export function textMessageFactory(input: InputTextMessageFactory): TextMessage {
-  // TODO:
-  throw Error('TODO')
+  return {
+    ...input,
+    ...getSameParams(),
+    type: MessageType.text,
+  }
 }
 
-export function noteMessageFactory(message: InputNoteMessageFactory): NoteMessage {
-  // TODO:
-  throw Error('TODO')
+export function noteMessageFactory(input: InputNoteMessageFactory): NoteMessage {
+  return {
+    ...input,
+    ...getSameParams(),
+    type: MessageType.note,
+  }
 }
 
-export function imageMessageFactory(message: InputImageMessageFactory): ImageMessage {
-  // TODO:
-  throw Error('TODO')
+export function imageMessageFactory(input: InputImageMessageFactory): ImageMessage {
+  return {
+    ...input,
+    ...getSameParams(),
+    type: MessageType.image,
+  }
 }
