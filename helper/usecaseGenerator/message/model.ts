@@ -1,4 +1,4 @@
-import { Omit } from '../../helper/type'
+import { Omit } from '../../type'
 import { TextMessage, NoteMessage, ImageMessage, MessageType } from './type'
 import { Field, Doc } from '@1amageek/ballcap'
 

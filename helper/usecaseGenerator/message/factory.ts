@@ -1,20 +1,23 @@
 import { TextMessage, NoteMessage, ImageMessage, MessageType } from './type'
 import { factoryMessageId } from './model'
-import { getUserId } from '../../firebase/helpers'
+import { getUserId } from '../../auth'
 
 type Base = {
   sentToAccountId: string
 }
 
-export type InputTextMessageFactory = Base & {
+
+type InputTextMessageFactory = Base & {
   text: TextMessage['text']
 }
 
-export type InputNoteMessageFactory = Base & {
+
+type InputNoteMessageFactory = Base & {
   noteId: NoteMessage['noteId']
 }
 
-export type InputImageMessageFactory = Base & {
+
+type InputImageMessageFactory = Base & {
   imageUrl: ImageMessage['imageUrl']
 }
 

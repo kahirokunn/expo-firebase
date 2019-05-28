@@ -1,7 +1,7 @@
 import { Message } from './type'
 import { collectionData } from 'rxfire/firestore'
 import { filter, map } from 'rxjs/operators'
-import { Timestamp } from '../../firebase'
+import { Timestamp } from '../../../firebase'
 import { messageModelClassFactory, MessageCollectionName } from './model'
 
 type Document = Message & { createdAt: Timestamp }

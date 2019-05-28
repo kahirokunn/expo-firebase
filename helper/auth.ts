@@ -1,4 +1,4 @@
-import { auth, firestore } from './index'
+import { auth } from '../firebase/index'
 
 export function getUserId() {
   const { currentUser } = auth()

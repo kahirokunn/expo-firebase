@@ -1,12 +1,12 @@
 import { Pick2th } from '../../helper/type'
-import { MessageCollectionName } from '../../usecaseGenerator/message/model'
+import { MessageCollectionName } from '../../helper/usecaseGenerator/message/model'
 import {
   sendImageMessage as baseSendImageMessage,
   sendNoteMessage as baseSendNoteMessage,
   sendTextMessage as baseSendTextMessage,
-} from '../../usecaseGenerator/message/command'
+} from '../../helper/usecaseGenerator/message/command'
 
-const collectionName = MessageCollectionName.oneToOne
+const collectionName = MessageCollectionName.group
 
 export function sendImageMessage(message: Pick2th<typeof baseSendImageMessage>) {
   return baseSendImageMessage(collectionName, message)
