@@ -1,59 +1,93 @@
-import { firestore } from './firebase/index';
 import React from 'react';
 import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
-import { generateArticles } from './seed/articles';
+import { Subscription } from 'rxjs'
+import { sendTextMessage } from './command/message/messageOneToOne'
+import { OneToOneMessageObserver } from './query/message/messageOneToOne'
+import { PickItemTypeFromObservable } from './submodule/type'
+import {
+  isNoteMessage,
+  isTextMessage
+} from './entity/message/distinguish'
 
-type Article = { id: string, title: string, body: string }
+type Message = PickItemTypeFromObservable<OneToOneMessageObserver['messages$']>[number]
 type Props = {};
 type State = {
-  articles: Article[]
+  messages: Message[]
+  subscription: Subscription | null
 };
 
-// generateArticles(100);
+const messageOneToOne = new OneToOneMessageObserver();
+
+function renderMessage(message: Message) {
+  if (isTextMessage(message)) {
+    return (
+      <Text style={{
+        fontSize: 20,
+        color: 'black',
+        fontWeight: 'bold',
+      }}>{`text: ${message.text}`}</Text>)
+  } else if (isNoteMessage(message)) {
+    return (
+      <Text style={{
+        fontSize: 20,
+        color: 'black',
+        fontWeight: 'bold',
+      }}>{`noteId: ${message.noteId}`}</Text>)
+  } else {
+    return (
+      <Text style={{
+        fontSize: 20,
+        color: 'black',
+        fontWeight: 'bold',
+      }}>{`imageUrl: ${message.imageUrl}`}</Text>)
+  }
+}
+
+function onPress() {
+  sendTextMessage({
+    text: `Hello world! ${Math.random() * 100}`,
+    sentToAccountId: 'test'
+  })
+}
 
 export default class App extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      articles: []
+      messages: [],
+      subscription: null,
     }
   }
 
   componentDidMount() {
-    firestore.collection("articles").onSnapshot((querySnapshot) => {
-      const articles: Article[] = []
-      querySnapshot.forEach((doc) => {
-        const article: Article = {
-          id: doc.id,
-          title: doc.data().title,
-          body: doc.data().body
-        }
-        articles.push(article)
-      })
-      this.setState({ articles })
-      console.log('look this: ', this.state.articles)
-    }, (e) => console.log(e))
+    const subscription = messageOneToOne
+      .messages$
+      .subscribe(messages => this.setState({ messages }))
+    this.setState({ subscription })
+  }
+
+  componentWillUnmount() {
+    if (this.state.subscription) {
+      this.state.subscription.unsubscribe()
+    }
   }
 
   render() {
     return (
       <View style={styles.container}>
         <Text>Open up App.js to start working on your app!</Text>
-        <Button title={"add new Article"} onPress={() => generateArticles(10)} />
+        <Button
+          title={"add new Article"}
+          onPress={() => onPress()}
+        />
         <ScrollView>
-          {this.state.articles.map(article => (
-            <View key={article.id} style={{
+          {this.state.messages.map(message => (
+            <View key={message.id} style={{
               backgroundColor: 'pink',
               height: 45,
               justifyContent: 'center',
               paddingLeft: 20,
-            }}>
-              <Text style={{
-                fontSize: 20,
-                color: 'black',
-                fontWeight: 'bold',
-              }}>{article.title}</Text>
-            </View>
+            }}>{renderMessage(message)}</View>
           ))}
         </ScrollView>
       </View>
