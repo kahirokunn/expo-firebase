@@ -1,22 +1,22 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
 import { Subscription } from 'rxjs'
-import { sendTextMessage } from './usecase/messageOneToOne/command'
-import { MessageOneToOne } from './usecase/messageOneToOne/query'
+import { sendTextMessage } from './command/message/messageOneToOne'
+import { OneToOneMessageObserver } from './query/message/messageOneToOne'
+import { PickItemTypeFromObservable } from './submodule/type'
 import {
-  Message,
-  isTextMessage,
   isNoteMessage,
-  textMessageFactory
-} from './usecase/messageOneToOne'
+  isTextMessage
+} from './entity/message/distinguish'
 
+type Message = PickItemTypeFromObservable<OneToOneMessageObserver['messages$']>[number]
 type Props = {};
 type State = {
   messages: Message[]
   subscription: Subscription | null
 };
 
-const messageOneToOne = new MessageOneToOne();
+const messageOneToOne = new OneToOneMessageObserver();
 
 function renderMessage(message: Message) {
   if (isTextMessage(message)) {
@@ -44,10 +44,10 @@ function renderMessage(message: Message) {
 }
 
 function onPress() {
-  sendTextMessage(textMessageFactory({
+  sendTextMessage({
     text: `Hello world! ${Math.random() * 100}`,
     sentToAccountId: 'test'
-  }))
+  })
 }
 
 export default class App extends React.Component<Props, State> {

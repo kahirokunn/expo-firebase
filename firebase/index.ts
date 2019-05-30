@@ -1,5 +1,6 @@
 import Ballcap from '@1amageek/ballcap'
 import firebase from 'firebase/app'
+import 'firebase/auth'
 import 'firebase/firestore'
 import config from './config';
 
@@ -9,6 +10,4 @@ Ballcap.initialize(app.firestore())
 
 const { auth } = firebase
 
-type Timestamp = firebase.firestore.Timestamp
-
-export { firestore, auth, Timestamp }
+export { firestore, auth }
