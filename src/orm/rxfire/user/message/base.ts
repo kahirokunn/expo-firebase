@@ -1,22 +1,23 @@
 import { Message } from '../../../../entity/message'
 import { collectionData } from 'rxfire/firestore'
-import { filter, map } from 'rxjs/operators'
+import { filter, map, tap } from 'rxjs/operators'
 import { Timestamp, Query } from '../../../../firebase/type'
 import { PaginationObservableFactory } from '../../observableFactory';
 import { getOwnId } from '../../../../domain/auth';
 import { firestore } from '../../../../firebase';
+import { USER } from '../../../../firebase/collectionSchema';
 
 export type Document = Message & { createdAt: Timestamp }
 
 export function messageMapper(messageDocRef: Document): Message {
   return {
     ...messageDocRef,
-    createdAt: messageDocRef.createdAt.toDate(),
+    createdAt: messageDocRef.createdAt ? messageDocRef.createdAt.toDate() : new Date(),
   }
 }
 
 function getPaginationQuery(query: Query, limit: number, startAfter?: Date) {
-  query = query.orderBy('updatedAt', 'desc').limit(limit)
+  query = query.orderBy('createdAt', 'desc').limit(limit)
   if (startAfter) {
     query = query.startAfter(startAfter)
   }
@@ -27,7 +28,7 @@ export abstract class BaseMessageObservable implements PaginationObservableFacto
   abstract messageCollectionName(): string
 
   public factory(limit: number, startAfter?: Date) {
-    const collectionPath = `user/${getOwnId()}/${this.messageCollectionName()}`
+    const collectionPath = `${USER.name}/${getOwnId()}/${this.messageCollectionName()}`
     const query = firestore.collection(collectionPath)
     return collectionData<Document>(getPaginationQuery(query, limit, startAfter), 'id')
       .pipe(filter((dataList) => dataList.length > 0))

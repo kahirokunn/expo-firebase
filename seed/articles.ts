@@ -1,4 +1,4 @@
-import { firestore } from '../firebase/index'
+import { firestore } from '../src/firebase/index'
 
 // 適当なサンプルデータを生成する
 export function generateArticles(n: number) {

@@ -68,6 +68,7 @@ export default class App extends React.Component<Props, State> {
       .messages$
       .subscribe(messages => this.setState({ messages }))
     this.setState({ subscription })
+    messageOneToOne.fetchMessage(10)
   }
 
   componentWillUnmount() {
@@ -84,7 +85,7 @@ export default class App extends React.Component<Props, State> {
           title={"add new Article"}
           onPress={() => onPress()}
         />
-        <View style={{ height: 80 }} >
+        <View style={{ height: 300 }} >
           <ScrollView>
             {this.state.messages.map(message => (
               <View key={message.id} style={{
