@@ -7,7 +7,6 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@1amageek/ballcap": "^0.4.0",
     "expo": "^32.0.0",
     "firebase": "^6.1.0",
     "react": "16.5.0",

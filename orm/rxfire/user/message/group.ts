@@ -1,8 +1,8 @@
 import { BaseMessageObservable } from './base'
-import { GroupMessage } from '../../../ballcap/user/message';
+import { USER } from '../../../../firebase/collectionSchema';
 
-export class GroupMessageObservable extends BaseMessageObservable {
-  public query() {
-    return GroupMessage.collectionReference()
+export class MessageGroupObservable extends BaseMessageObservable {
+  public messageCollectionName() {
+    return USER.children.MESSAGE_GROUP.name
   }
 }

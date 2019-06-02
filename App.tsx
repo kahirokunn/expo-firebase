@@ -80,16 +80,18 @@ export default class App extends React.Component<Props, State> {
           title={"add new Article"}
           onPress={() => onPress()}
         />
-        <ScrollView>
-          {this.state.messages.map(message => (
-            <View key={message.id} style={{
-              backgroundColor: 'pink',
-              height: 45,
-              justifyContent: 'center',
-              paddingLeft: 20,
-            }}>{renderMessage(message)}</View>
-          ))}
-        </ScrollView>
+        <View style={{ height: 80 }} >
+          <ScrollView>
+            {this.state.messages.map(message => (
+              <View key={message.id} style={{
+                backgroundColor: 'pink',
+                height: 45,
+                justifyContent: 'center',
+                paddingLeft: 20,
+              }}>{renderMessage(message)}</View>
+            ))}
+          </ScrollView>
+        </View>
       </View>
     );
   }
@@ -98,7 +100,7 @@ export default class App extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#008080',
     alignItems: 'center',
     justifyContent: 'center',
   },

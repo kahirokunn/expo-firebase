@@ -1,8 +1,8 @@
 import { BaseMessageObservable } from './base'
-import { AdminMessage } from '../../../ballcap/user/message';
+import { USER } from '../../../../firebase/collectionSchema';
 
-export class AdminMessageObservable extends BaseMessageObservable {
-  public query() {
-    return AdminMessage.collectionReference()
+export class MessageAdminObservable extends BaseMessageObservable {
+  public messageCollectionName() {
+    return USER.children.MESSAGE_ADMIN.name
   }
 }

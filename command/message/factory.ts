@@ -2,11 +2,11 @@ import { Omit } from "../../submodule/type";
 import { TextMessage, NoteMessage, ImageMessage, MessageType, Message } from '../../entity/message/index'
 import { getOwnId } from "../../entity/auth";
 
-type InputText = Omit<Omit<Omit<TextMessage, 'type'>, 'createdAt'>, 'sentFromAccountId'>
-type InputNote = Omit<Omit<Omit<NoteMessage, 'type'>, 'createdAt'>, 'sentFromAccountId'>
-type InputImage = Omit<Omit<Omit<ImageMessage, 'type'>, 'createdAt'>, 'sentFromAccountId'>
+type InputText = Omit<Omit<Omit<Omit<TextMessage, 'type'>, 'createdAt'>, 'sentFromAccountId'>, 'id'>
+type InputNote = Omit<Omit<Omit<Omit<NoteMessage, 'type'>, 'createdAt'>, 'sentFromAccountId'>, 'id'>
+type InputImage = Omit<Omit<Omit<Omit<ImageMessage, 'type'>, 'createdAt'>, 'sentFromAccountId'>, 'id'>
 
-export function textMessageFactory(input: InputText): TextMessage {
+export function textMessageFactory(input: InputText): Omit<TextMessage, 'id'> {
   return {
     ...input,
     createdAt: new Date(),
@@ -15,7 +15,7 @@ export function textMessageFactory(input: InputText): TextMessage {
   }
 }
 
-export function noteMessageFactory(input: InputNote): NoteMessage {
+export function noteMessageFactory(input: InputNote): Omit<NoteMessage, 'id'> {
   return {
     ...input,
     createdAt: new Date(),
@@ -24,7 +24,7 @@ export function noteMessageFactory(input: InputNote): NoteMessage {
   }
 }
 
-export function imageMessageFactory(input: InputImage): ImageMessage {
+export function imageMessageFactory(input: InputImage): Omit<ImageMessage, 'id'> {
   return {
     ...input,
     createdAt: new Date(),

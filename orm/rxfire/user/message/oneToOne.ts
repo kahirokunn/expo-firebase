@@ -1,8 +1,8 @@
 import { BaseMessageObservable } from './base'
-import { OneToOneMessage } from '../../../ballcap/user/message';
+import { USER } from '../../../../firebase/collectionSchema';
 
-export class OneToOneMessageObservable extends BaseMessageObservable {
-  public query() {
-    return OneToOneMessage.collectionReference()
+export class MessageOneToOneObservable extends BaseMessageObservable {
+  public messageCollectionName() {
+    return USER.children.MESSAGE_ONE_TO_ONE.name
   }
 }

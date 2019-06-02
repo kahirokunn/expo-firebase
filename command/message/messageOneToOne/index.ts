@@ -1,22 +1,18 @@
-import { messageToOneToOneMessage, factoryOneToOneMessageId } from '../../../orm/ballcap/user/message';
-import { Pick1th, Omit } from '../../../submodule/type';
+import { Pick1th } from '../../../submodule/type';
 import { textMessageFactory, imageMessageFactory, noteMessageFactory } from '../factory';
-import { saveOneToOneMessage } from '../../../orm/ballcap/user';
+import { MessageOneToOneRepository } from '../../../domain/repository/message/messageOneToOne';
 
-export async function sendImageMessage(input: Omit<Pick1th<typeof imageMessageFactory>, 'id'>) {
-  const imageMessage = imageMessageFactory({ ...input, id: factoryOneToOneMessageId() })
-  const model = messageToOneToOneMessage(imageMessage)
-  await saveOneToOneMessage(model)
+export async function sendImageMessage(input: Pick1th<typeof imageMessageFactory>) {
+  const repository = new MessageOneToOneRepository()
+  await repository.create(imageMessageFactory(input))
 }
 
-export async function sendNoteMessage(input: Omit<Pick1th<typeof noteMessageFactory>, 'id'>) {
-  const imageMessage = noteMessageFactory({ ...input, id: factoryOneToOneMessageId() })
-  const model = messageToOneToOneMessage(imageMessage)
-  await saveOneToOneMessage(model)
+export async function sendNoteMessage(input: Pick1th<typeof noteMessageFactory>) {
+  const repository = new MessageOneToOneRepository()
+  await repository.create(noteMessageFactory(input))
 }
 
-export async function sendTextMessage(input: Omit<Pick1th<typeof textMessageFactory>, 'id'>) {
-  const imageMessage = textMessageFactory({ ...input, id: factoryOneToOneMessageId() })
-  const model = messageToOneToOneMessage(imageMessage)
-  await saveOneToOneMessage(model)
+export async function sendTextMessage(input: Pick1th<typeof textMessageFactory>) {
+  const repository = new MessageOneToOneRepository()
+  await repository.create(textMessageFactory(input))
 }
