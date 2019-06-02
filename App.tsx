@@ -7,7 +7,7 @@ import { PickItemTypeFromObservable } from './submodule/type'
 import {
   isNoteMessage,
   isTextMessage
-} from './entity/message/distinguish'
+} from './domain/message'
 
 type Message = PickItemTypeFromObservable<OneToOneMessageObserver['messages$']>[number]
 type Props = {};

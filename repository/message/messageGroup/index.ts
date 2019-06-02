@@ -1,5 +1,5 @@
 import { BaseMessageRepository } from "../base";
-import { USER } from "../../../../firebase/collectionSchema";
+import { USER } from "../../../firebase/collectionSchema";
 
 export class MessageGroupRepository extends BaseMessageRepository {
   public messageCollectionName() {

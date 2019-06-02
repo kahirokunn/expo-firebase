@@ -1,6 +1,6 @@
 import { Omit } from "../../submodule/type";
 import { TextMessage, NoteMessage, ImageMessage, MessageType, Message } from '../../entity/message/index'
-import { getOwnId } from "../../entity/auth";
+import { getOwnId } from "../../domain/auth";
 
 type InputText = Omit<Omit<Omit<Omit<TextMessage, 'type'>, 'createdAt'>, 'sentFromAccountId'>, 'id'>
 type InputNote = Omit<Omit<Omit<Omit<NoteMessage, 'type'>, 'createdAt'>, 'sentFromAccountId'>, 'id'>

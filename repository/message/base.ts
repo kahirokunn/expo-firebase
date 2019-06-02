@@ -1,6 +1,6 @@
-import { firebase, firestore } from "../../../firebase";
-import { TextMessage, NoteMessage, ImageMessage, MessageType } from "../../../entity/message";
-import { Omit } from "../../../submodule/type";
+import { firebase, firestore } from "../../firebase";
+import { TextMessage, NoteMessage, ImageMessage, MessageType } from "../../entity/message";
+import { Omit } from "../../submodule/type";
 
 type OmitIdTextMessage = Omit<TextMessage, 'id'>
 type OmitIdNoteMessage = Omit<NoteMessage, 'id'>

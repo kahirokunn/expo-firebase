@@ -3,7 +3,7 @@ import { collectionData } from 'rxfire/firestore'
 import { filter, map } from 'rxjs/operators'
 import { Timestamp, Query } from '../../../../firebase/type'
 import { PaginationObservableFactory } from '../../observableFactory';
-import { getOwnId } from '../../../../entity/auth';
+import { getOwnId } from '../../../../domain/auth';
 import { firestore } from '../../../../firebase';
 
 export type Document = Message & { createdAt: Timestamp }
