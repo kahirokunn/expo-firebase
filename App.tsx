@@ -1,13 +1,15 @@
+import './src/firebase'
 import React from 'react';
 import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
 import { Subscription } from 'rxjs'
-import { sendTextMessage } from './command/message/messageOneToOne'
-import { OneToOneMessageObserver } from './query/message/messageOneToOne'
-import { PickItemTypeFromObservable } from './submodule/type'
+import { sendTextMessage } from './src/command/message/messageOneToOne'
+import { OneToOneMessageObserver } from './src/query/message/messageOneToOne'
+import { PickItemTypeFromObservable } from './src/submodule/type'
 import {
   isNoteMessage,
   isTextMessage
-} from './domain/message'
+} from './src/domain/message'
+import { startDebug } from './src/debug';
 
 type Message = PickItemTypeFromObservable<OneToOneMessageObserver['messages$']>[number]
 type Props = {};
@@ -15,6 +17,8 @@ type State = {
   messages: Message[]
   subscription: Subscription | null
 };
+
+startDebug()
 
 const messageOneToOne = new OneToOneMessageObserver();
 

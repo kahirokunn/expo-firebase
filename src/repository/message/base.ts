@@ -12,7 +12,6 @@ export abstract class BaseMessageRepository {
 
   public create(message: OmitMessage) {
     const collectionPath = `user/${message.sentFromAccountId}/${this.messageCollectionName()}`
-
     return firestore.collection(collectionPath).doc().set(mapEntityToDTO(message))
   }
 }
