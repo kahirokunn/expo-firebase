@@ -1,26 +1,24 @@
-import './src/firebase'
-import React from 'react';
-import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
+import { firebase } from './src/firebase'
+import React from 'react'
+import { StyleSheet, Text, View, Button, ScrollView } from 'react-native'
 import { Subscription } from 'rxjs'
-import { sendTextMessage } from 'common-messanger/lib/command/message/messageOneToOne'
-import { OneToOneMessageObserver } from 'common-messanger/lib/query/message/messageOneToOne'
-import { PickItemTypeFromObservable } from './src/submodule/type'
 import {
+  MessageObserver,
   isNoteMessage,
-  isTextMessage
-} from 'common-messanger/lib/domain/message'
-import { startDebug } from 'common-messanger/lib/debug';
+  isTextMessage,
+  sendTextMessage,
+  Message,
+} from 'common-messanger'
+import { filter, map } from 'rxjs/operators';
 
-type Message = PickItemTypeFromObservable<OneToOneMessageObserver['messages$']>[number]
-type Props = {};
+const roomId = '1'
+
+type Props = {}
 type State = {
   messages: Message[]
   subscription: Subscription | null
-};
-
-startDebug()
-
-const messageOneToOne = new OneToOneMessageObserver();
+}
+const messageObserver = new MessageObserver()
 
 function renderMessage(message: Message) {
   if (isTextMessage(message)) {
@@ -48,15 +46,20 @@ function renderMessage(message: Message) {
 }
 
 function onPress() {
-  sendTextMessage({
-    text: `Hello world! ${Math.random() * 100}`,
-    sentToAccountId: 'test'
-  })
+  const currentUser = firebase.auth().currentUser
+  if (currentUser) {
+    console.info('ログイン済みです', currentUser)
+    sendTextMessage(roomId, {
+      text: `Hello world! ${Math.random() * 100}`
+    })
+  } else {
+    console.error('未ログイン')
+  }
 }
 
-export default class App extends React.Component<Props, State> {
+export default class OneToOne extends React.Component<Props, State> {
   constructor(props: Props) {
-    super(props);
+    super(props)
     this.state = {
       messages: [],
       subscription: null,
@@ -64,11 +67,13 @@ export default class App extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const subscription = messageOneToOne
+    const subscription = messageObserver
       .messages$
+      .pipe(filter(data => data.roomId === roomId))
+      .pipe(map(data => data.messages))
       .subscribe(messages => this.setState({ messages }))
     this.setState({ subscription })
-    messageOneToOne.fetchMessage(10)
+    messageObserver.fetchMessage(roomId, 10)
   }
 
   componentWillUnmount() {
@@ -98,7 +103,7 @@ export default class App extends React.Component<Props, State> {
           </ScrollView>
         </View>
       </View>
-    );
+    )
   }
 }
 
@@ -109,4 +114,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+})

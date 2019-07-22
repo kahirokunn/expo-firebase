@@ -9,5 +9,6 @@ const firestore = firebase.firestore(app)
 installApp(firestore)
 
 const { auth } = firebase
+firebase.auth().signInAnonymously().catch((error) => console.error(error))
 
 export { firebase, firestore, auth }
